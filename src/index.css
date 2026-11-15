@@ -1,23 +1,71 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-blue: #0ea5e9;
-  --color-brand-teal: #14b8a6;
-  --color-brand-dark: #0f172a; /* Deep navy / charcoal */
-  --color-brand-darker: #020617;
+  --color-brand-blue: #38bdf8;
+  --color-brand-teal: #10b981;
+  --color-brand-dark: #000000;
+  --color-brand-darker: #050508;
   
-  --font-sans: "Inter", system-ui, sans-serif;
-  --font-mono: "Fira Code", "JetBrains Mono", monospace;
+  --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "Fira Code", "JetBrains Mono", Menlo, Monaco, Consolas, monospace;
 }
 
 @layer base {
   body {
-    background-color: var(--color-brand-dark);
-    color: #e2e8f0;
+    background-color: #030407;
+    color: #f1f5f9;
     font-family: var(--font-sans);
+    overflow-x: hidden;
   }
 }
 
 html {
   scroll-behavior: smooth;
+  background-color: #030407;
+}
+
+/* Subtle, Deep Dark Developer Grid (No Blue/Purple washes) */
+.dev-grid-bg {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+
+.dev-dots-bg {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Bold Deep Dark Card (Obsidian / Dark Graphite) */
+.dev-card {
+  background: #090a0f;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.8), inset 0 1px 0 0 rgba(255, 255, 255, 0.04);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dev-card:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.9), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+}
+
+/* Custom Sleek Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #030407;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1f2430;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #333d4e;
 }
