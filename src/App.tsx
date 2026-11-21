@@ -7,7 +7,6 @@ import { DevOpsTerminal } from './components/DevOpsTerminal';
 import { SkillsSection } from './components/SkillsSection';
 import { ExperienceSection } from './components/ExperienceSection';
 import { ProjectsSection } from './components/ProjectsSection';
-import { CertEduSection } from './components/CertEduSection';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
 import { ResumeModal } from './components/ResumeModal';
@@ -50,9 +49,6 @@ export function App() {
 
         {/* 8. Featured Production Projects */}
         <ProjectsSection />
-
-        {/* 9. Certifications & Academic Foundation */}
-        <CertEduSection />
 
         {/* 10. Contact & Social Connect */}
         <ContactSection onOpenResumeModal={handleOpenResumeModal} />

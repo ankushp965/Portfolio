@@ -69,17 +69,48 @@ export interface ExperienceItem {
   projects: ExperienceProject[];
 }
 
+export interface ProjectMetricCard {
+  value: string;
+  label: string;
+  subtext: string;
+  note?: string;
+}
+
+export interface ChallengeItem {
+  title: string;
+  category: string;
+  issue: string;
+  resolution: string;
+}
+
+export interface ScreenshotPlaceholder {
+  id: string;
+  title: string;
+  subtitle: string;
+  command: string;
+  badge: string;
+}
+
 export interface ProjectItem {
   id: string;
   title: string;
+  subtitle?: string;
+  date?: string;
+  projectScope?: string;
   tagline: string;
   featured: boolean;
-  status: 'Production' | 'Live' | 'Open Source';
+  status: 'Production' | 'Live' | 'Open Source' | 'Completed';
   githubUrl?: string;
   liveUrl?: string;
   tags: string[];
   metrics: string[];
   description: string[];
+  executiveSummary?: string;
+  metricCards?: ProjectMetricCard[];
+  problemVsSolution?: { problem: string; solution: string }[];
+  challengesSolved?: ChallengeItem[];
+  limitations?: string[];
+  screenshots?: ScreenshotPlaceholder[];
   architectureSummary: string;
   architectureSteps?: { step: string; description: string }[];
 }
@@ -125,11 +156,11 @@ export const personalInfo: PersonalInfo = {
     text: "Open for DevOps & Platform Roles",
     available: true,
   },
-  headlineBio: "Automating resilient AWS infrastructure with Terraform, enforcing declarative GitOps continuous delivery via Argo CD, and engineering self-healing Kubernetes platforms with shift-left DevSecOps security.",
+  headlineBio: "Automating resilient AWS infrastructure with Terraform, enforcing declarative GitOps continuous delivery via Argo CD, and engineering cloud-native Kubernetes platforms with progressive canary rollouts and shift-left DevSecOps security.",
   aboutParagraphs: [
-    "I am a DevOps Engineer with 1+ year of hands-on experience building, automating, and securing production AWS infrastructure and high-velocity CI/CD pipelines.",
-    "My core work centers on Infrastructure as Code (Terraform with reusable modules and remote state), container orchestration with AWS EKS and Docker, GitOps continuous delivery through Argo CD, and robust DevSecOps practices integrating SAST (SonarQube, Bandit), SCA (Trivy, pip-audit), and DAST (OWASP ZAP) directly into GitHub Actions.",
-    "Beyond traditional cloud operations, I specialize in reliable platform automation—from engineering self-healing Kubernetes workflows that auto-diagnose and remediate CrashLoopBackOff/OOM failures, to provisioning air-gapped, zero-leakage enterprise AI infrastructure."
+    "I am a DevOps Engineer with hands-on experience building, automating, and securing cloud infrastructure and high-velocity CI/CD pipelines.",
+    "My core work centers on Infrastructure as Code (Terraform with reusable modules and remote state), container orchestration with AWS EKS and Docker, GitOps continuous delivery through Argo CD, and robust DevSecOps practices integrating SAST (Bandit), SCA (pip-audit, Trivy), and container scanning directly into GitHub Actions.",
+    "Beyond traditional cloud operations, I specialize in reliable platform automation—from engineering progressive canary deployments on AWS EKS with Argo Rollouts and Prometheus metrics analysis, to provisioning air-gapped, zero-leakage local AI infrastructure."
   ]
 };
 
@@ -159,10 +190,10 @@ export const impactMetrics: Metric[] = [
     iconName: "server"
   },
   {
-    id: "self-healing",
+    id: "canary-rollout",
     value: "100%",
-    label: "Automated Pod Remediation",
-    subtext: "Alertmanager webhook to LangGraph auto-restart/rollback on EKS",
+    label: "Canary Rollout Reliability",
+    subtext: "Prometheus 500 error analysis auto-aborted failed canary on Argo Rollouts",
     iconName: "shield"
   },
   {
@@ -206,8 +237,8 @@ export const skillCategories: SkillCategory[] = [
     badge: "Orchestration",
     description: "Production cluster management and Git-driven continuous delivery",
     skills: [
-      "Kubernetes", "AWS EKS", "Docker", "Helm 3", "Argo CD (GitOps)",
-      "Nginx Reverse Proxy", "Container Networking", "Multi-Stage Dockerfiles"
+      "Kubernetes", "AWS EKS 1.31", "Docker", "Helm 3", "Argo CD (GitOps)",
+      "Argo Rollouts", "Kyverno (CEL)", "Nginx Reverse Proxy", "Container Networking", "Multi-Stage Dockerfiles"
     ]
   },
   {
@@ -299,41 +330,144 @@ export const experienceData: ExperienceItem[] = [
 // -----------------------------------------------------------------------------
 export const projectsData: ProjectItem[] = [
   {
-    id: "self-healing-k8s",
-    title: "Self-Healing Kubernetes on AWS EKS",
-    tagline: "Automated Incident Remediation Loop for Kubernetes via Prometheus & LangGraph",
+    id: "fintech-payment-platform-eks",
+    title: "FinTech Cloud-Native Payment Platform on AWS EKS",
+    subtitle: "GitOps, Progressive Canary Deployments & Policy Guardrails",
+    date: "November 2026",
+    projectScope: "Demo-scale project",
+    tagline: "GitOps, Progressive Canary Deployments & Policy Guardrails on AWS EKS 1.31",
     featured: true,
-    status: "Production",
-    githubUrl: "https://github.com/ankushp965/self-healing-kubernetes",
+    status: "Completed",
+    githubUrl: "https://github.com/ankushp965/Payment-Platform",
+    executiveSummary: "Multi-service payment application (FastAPI: payment-api, ledger, notification + PostgreSQL 15) on AWS EKS 1.31, provisioned via Terraform (VPC with public/private subnets, single NAT Gateway, 3 ECR repos, Secrets Manager, S3 + DynamoDB remote state). Packaged with Helm v3 and synchronized via Argo CD (in-cluster GitOps). Deployed temporarily for benchmarking and cleanly destroyed post-testing.",
     tags: [
-      "Terraform", "AWS EKS", "Argo CD", "Kubernetes", "Helm", "Prometheus",
-      "Alertmanager", "LangGraph", "FastAPI", "Docker", "GitHub Actions"
+      "AWS EKS 1.31", "Terraform", "Argo CD", "Argo Rollouts", "Prometheus", "Kyverno",
+      "Helm", "FastAPI", "PostgreSQL", "Docker", "k6", "GitHub Actions"
     ],
     metrics: [
-      "100% automated failure triage",
-      "Instant Helm rollback on bad deployments",
-      "Slack incident reasoning dispatch"
+      "1,632/1,632 payments successful (k6, 50 VUs)",
+      "Canary auto-abort on Prometheus 500 spike",
+      "~60% estimated EC2 Spot compute savings",
+      "14 Starlette CVEs patched via pip-audit"
+    ],
+    metricCards: [
+      {
+        value: "1,632 / 1,632",
+        label: "Successful Payments",
+        subtext: "100% transaction availability during k6 load testing (50 Virtual Users, 1m50s ramp).",
+        note: "p95 latency was 2.41s, exceeding the script's 500ms SLO target likely due to a local kubectl port-forward tunnel (SPDY connection multiplexing bottleneck, not verified with ALB re-test before teardown)."
+      },
+      {
+        value: "Auto-Abort",
+        label: "Canary Guardrail",
+        subtext: "Argo Rollouts 25% -> 50% -> 100% strategy with 30s pause intervals.",
+        note: "Prometheus AnalysisTemplate queried HTTP 500 error rate every 10s and automatically aborted the rollout in ~20s (failureLimit: 2) upon simulated 500 error injection; zero manual intervention."
+      },
+      {
+        value: "~60% Savings",
+        label: "Spot Compute",
+        subtext: "2x c7i-flex.large Spot worker nodes provisioned via Terraform on AWS EKS.",
+        note: "Estimated compute savings vs On-Demand (~$52.56/mo vs ~$131.10/mo based on AWS list pricing for ap-south-1 Mumbai; Spot rates vary dynamically)."
+      },
+      {
+        value: "14 CVEs",
+        label: "Patched via pip-audit",
+        subtext: "14 Starlette CVEs identified by pip-audit in CI pipeline and remediated.",
+        note: "Patched by upgrading to fastapi>=0.115.0 and starlette>=1.1.0 across all microservices. Trivy container scan ran in reporting mode with exit-code: 0 (does not block)."
+      }
+    ],
+    problemVsSolution: [
+      {
+        problem: "Deploying microservice updates directly to traffic risks cascading payment failures and database inconsistencies.",
+        solution: "Argo Rollouts progressive canary steps (25% -> 50% -> 100%) with Prometheus AnalysisTemplates continuously evaluating HTTP 500 error rates to abort faulty rollouts automatically."
+      },
+      {
+        problem: "Manual cluster configurations risk runtime drifts, privileged container executions, and missing resource bounds.",
+        solution: "Argo CD in-cluster GitOps keeps state aligned with Helm manifests, while Kyverno CEL ValidatingPolicies in enforce mode disallow :latest tags and mandate non-root execution and CPU/memory limits."
+      },
+      {
+        problem: "Running dedicated on-demand compute for cloud infrastructure benchmarks generates unnecessary cloud expense.",
+        solution: "Configured Terraform EKS managed node group with 2x c7i-flex.large Spot instances, cutting estimated compute run cost by ~60% vs On-Demand rates."
+      }
+    ],
+    challengesSolved: [
+      {
+        title: "SQLAlchemy 2.0 / psycopg v3 Pod Crash",
+        category: "Database Driver",
+        issue: "SQLAlchemy 2.0 defaulted to psycopg v3, which crashed pods on initialization due to missing binary C extensions in lightweight container environments.",
+        resolution: "Explicitly declared 'postgresql+psycopg2' dialect in connection strings across all microservices, restoring reliable connectivity with psycopg2-binary."
+      },
+      {
+        title: "Postgres RollingUpdate Lock Conflict",
+        category: "Kubernetes Storage",
+        issue: "Standard RollingUpdate deployment strategy attempted to start a replacement pod before shutting down the existing instance, causing PersistentVolume storage lock conflicts and port binding errors.",
+        resolution: "Configured PostgreSQL deployment with 'Recreate' strategy, guaranteeing the existing pod releases volume locks and stops before the replacement pod mounts storage."
+      },
+      {
+        title: "Postgres Root Startup vs Kyverno Policy",
+        category: "Admission Control",
+        issue: "Official PostgreSQL image requires initial root execution (UID 0) to chown the data directory before dropping privileges, triggering admission rejection under Kyverno's non-root CEL policy.",
+        resolution: "Implemented a scoped Kyverno admission exemption specifically targeting 'app: postgres' within the payments namespace while maintaining non-root enforcement for all application workloads."
+      }
+    ],
+    limitations: [
+      "Rollback condition is an absolute 500 count (> 0) rather than an error percentage ratio.",
+      "Single in-cluster PostgreSQL pod (no HA / RDS).",
+      "Single NAT Gateway (single point of failure).",
+      "Demo-scale infrastructure cleanly destroyed after testing."
+    ],
+    screenshots: [
+      {
+        id: "argocd",
+        title: "Argo CD Application Tree",
+        subtitle: "In-Cluster GitOps Synchronization",
+        command: "argocd app get fintech-payment-platform-eks",
+        badge: "GitOps Synced"
+      },
+      {
+        id: "rollouts",
+        title: "Argo Rollouts Watch CLI",
+        subtitle: "Progressive Canary 25% -> 50% -> 100%",
+        command: "kubectl argo rollouts get rollout payment-api -n payments",
+        badge: "Canary Aborted"
+      },
+      {
+        id: "prometheus",
+        title: "Prometheus AnalysisTemplate",
+        subtitle: "HTTP 500 Error Metric Evaluation",
+        command: "sum(rate(http_requests_total{status=~\"5..\"}[1m]))",
+        badge: "PromQL Triggered"
+      },
+      {
+        id: "k6",
+        title: "k6 Load Test Execution",
+        subtitle: "50 Virtual Users Traffic Ramp (1,632 tx)",
+        command: "k6 run --vus 50 --duration 1m50s payment-load.js",
+        badge: "100% Available"
+      }
     ],
     description: [
-      "Provisioned an enterprise-grade AWS EKS cluster, ECR repository, VPC networking, and least-privilege IAM roles entirely through reusable Terraform IaC.",
-      "Deployed microservices using Helm charts and established declarative continuous delivery with Argo CD, syncing cluster state directly from Git.",
-      "Configured Prometheus rules and Alertmanager webhooks targeting CrashLoopBackOff, OOMKilled, and ImagePullBackOff failure patterns.",
-      "Built an autonomous LangGraph troubleshooting agent deployed as a FastAPI webhook service that reads pod logs/events, performs root-cause analysis, triggers automated pod restart or Helm rollback, and broadcasts diagnostic explanations to Slack.",
-      "Integrated SAST, SCA, and DAST security gates into GitHub Actions and verified resilient automated recovery by intentionally injecting pod crash loops and memory leaks."
+      "Engineered a multi-service payment platform (FastAPI: payment-api, ledger, notification + PostgreSQL 15) on AWS EKS 1.31, provisioned via modular Terraform.",
+      "Provisioned custom VPC networking with public/private subnets, a single NAT Gateway, 3 ECR repositories, Secrets Manager, and S3 + DynamoDB remote state backend.",
+      "Packaged microservices with Helm v3 charts and established continuous GitOps delivery using in-cluster Argo CD to reconcile cluster state against Git.",
+      "Configured Argo Rollouts with a 25% -> 50% -> 100% canary strategy (30s pauses) paired with Prometheus AnalysisTemplates querying HTTP 500 rates every 10s (failureLimit: 2).",
+      "Verified progressive delivery live by injecting simulated 500 errors during rollout: the canary automatically aborted in ~20s and traffic remained safely on the stable revision.",
+      "Enforced Kyverno CEL ValidatingPolicies in enforce mode across the payments namespace to disallow :latest image tags, enforce CPU/memory limits, and mandate non-root execution (with scoped exemption for Postgres).",
+      "Automated CI via GitHub Actions with Flake8 linting, Bandit SAST, pip-audit dependency scanning, Trivy container scanning (reporting mode with exit-code: 0), and ECR push on main."
     ],
-    architectureSummary: "Prometheus Alert -> Alertmanager Webhook -> FastAPI / LangGraph Agent -> Pod Log Triage -> Automated Helm Rollback / Restart -> Slack Broadcast.",
+    architectureSummary: "Client Traffic / k6 -> Ingress -> Argo Rollouts (payment-api 25%/50%/100%) -> Ledger & Notification -> PostgreSQL 15 (Recreate). Prometheus queries HTTP 500 rate every 10s to auto-abort. Enforced by Kyverno CEL policies.",
     architectureSteps: [
-      { step: "Provisioning", description: "VPC, public/private subnets, EKS control plane & worker nodes via Terraform with S3 remote state." },
-      { step: "GitOps Continuous Delivery", description: "Argo CD monitors Git repository; synchronizes Helm chart releases to EKS cluster." },
-      { step: "Detection", description: "Prometheus monitors pod metrics; fires alerts for CrashLoopBackOff and OOMKilled to Alertmanager." },
-      { step: "Automated Healing", description: "LangGraph agent receives webhook, investigates pod diagnostics, executes remediation (pod restart or Helm rollback), and posts summary to Slack." }
+      { step: "Terraform IaC", description: "VPC (public/private subnets, single NAT Gateway), EKS 1.31 with 2x c7i-flex.large Spot nodes, 3 ECR repos, Secrets Manager, S3+DynamoDB remote state." },
+      { step: "Argo CD GitOps", description: "In-cluster Argo CD continuously monitors Git and synchronizes Helm v3 multi-service manifests to the payments namespace." },
+      { step: "Canary & Prometheus", description: "Argo Rollouts routes 25% -> 50% -> 100% traffic; Prometheus AnalysisTemplate checks HTTP 500 rate every 10s and aborts rollout in ~20s on errors." },
+      { step: "Kyverno Policy Guardrails", description: "Kyverno CEL policies enforce non-root execution (postgres exempted), disallow :latest image tags, and mandate container CPU/memory limits." }
     ]
   },
   {
     id: "self-service-platform",
     title: "Self-Service Cloud Data Platform",
-    tagline: "Automated AWS Multi-Tier Infrastructure with Terraform Modules & Zero-Downtime CI/CD",
-    featured: true,
+    tagline: "Automated AWS Multi-Tier Infrastructure with Terraform Modules & Automated CI/CD",
+    featured: false,
     status: "Live",
     tags: [
       "AWS VPC", "Terraform", "Multi-AZ RDS", "Docker", "ECR", "GitHub Actions",
@@ -417,15 +551,16 @@ export const educationData: EducationItem[] = [
 // -----------------------------------------------------------------------------
 export const terminalCommands: TerminalCommand[] = [
   {
-    command: "kubectl get pods -n production",
-    description: "Inspect running Kubernetes microservices and health status",
+    command: "kubectl get pods -n payments",
+    description: "Inspect running payment microservices, database, and controllers",
     output: [
       "NAME                                    READY   STATUS    RESTARTS   AGE",
-      "self-healing-agent-7f99b8b64b-k82zq    1/1     Running   0          4d12h",
-      "data-platform-api-5c74776cb6-l8qsm     1/1     Running   0          2d18h",
-      "nginx-ingress-controller-6d7f8d6-xmn2  1/1     Running   0          14d",
-      "argocd-server-7956dfb4c7-w8nkl        1/1     Running   0          18d",
-      "prometheus-k8s-0                       2/2     Running   0          18d"
+      "payment-api-7b89d494f6-82xkz            1/1     Running   0          2d4h",
+      "ledger-684f88bdc6-n9wql                 1/1     Running   0          2d4h",
+      "notification-5975dbb9cf-v72pm           1/1     Running   0          2d4h",
+      "postgres-5d46fb7476-q8rm9               1/1     Running   0          2d4h",
+      "argo-rollouts-747f485db-xkdls           1/1     Running   0          18d",
+      "prometheus-server-5d6cbdf54-mk89q       2/2     Running   0          18d"
     ]
   },
   {
@@ -436,41 +571,42 @@ export const terminalCommands: TerminalCommand[] = [
       "+ resource \"aws_vpc\" \"main\" {",
       "    + cidr_block           = \"10.0.0.0/16\"",
       "    + enable_dns_hostnames = true",
-      "    + tags                 = { \"Environment\" = \"production\", \"ManagedBy\" = \"Terraform\" }",
+      "    + tags                 = { \"Environment\" = \"demo\", \"ManagedBy\" = \"Terraform\" }",
       "  }",
-      "# module.aws_infrastructure.aws_rds_cluster.mysql_multi_az will be created",
-      "+ resource \"aws_rds_cluster\" \"mysql_multi_az\" {",
-      "    + database_name        = \"production_db\"",
-      "    + storage_encrypted    = true",
+      "# module.aws_infrastructure.aws_eks_node_group.spot_workers will be created",
+      "+ resource \"aws_eks_node_group\" \"spot_workers\" {",
+      "    + capacity_type        = \"SPOT\"",
+      "    + instance_types       = [\"c7i-flex.large\"]",
+      "    + scaling_config       = { desired_size = 2, max_size = 3, min_size = 1 }",
       "  }",
-      "Plan: 7 to add, 0 to change, 0 to destroy. (State backed by S3 + DynamoDB lock)"
+      "Plan: 8 to add, 0 to change, 0 to destroy. (State backed by S3 + DynamoDB lock)"
     ]
   },
   {
-    command: "argocd app get self-healing-k8s",
+    command: "argocd app get fintech-payment-platform-eks",
     description: "Check declarative GitOps synchronization state",
     output: [
-      "Name:               self-healing-k8s",
+      "Name:               fintech-payment-platform-eks",
       "Project:            default",
       "Server:             https://kubernetes.default.svc",
-      "Namespace:          production",
-      "Repo:               https://github.com/ankushp965/self-healing-kubernetes",
+      "Namespace:          payments",
+      "Repo:               https://github.com/ankushp965/Payment-Platform",
       "Target:             HEAD (main)",
       "Sync Window:        Sync Allowed",
-      "Sync Status:        Synced to main (c27e8a1)",
+      "Sync Status:        Synced to main",
       "Health Status:      Healthy"
     ]
   },
   {
-    command: "trivy image ankush/self-service-platform:latest",
-    description: "Run shift-left container vulnerability & SCA scan",
+    command: "trivy image ankush/payment-api:latest",
+    description: "Run container vulnerability scan in reporting mode (exit-code: 0)",
     output: [
       "2026-11-14T22:30:15.120Z INFO Vulnerability scanning initiated...",
-      "ankush/self-service-platform:latest (alpine 3.19.1)",
+      "ankush/payment-api:latest (python 3.11-slim)",
       "===================================================",
       "Total: 0 (UNKNOWN: 0, LOW: 0, MEDIUM: 0, HIGH: 0, CRITICAL: 0)",
-      "SonarQube Quality Gate: PASSED | Bandit: 0 Issues | OWASP ZAP: Clean",
-      "Status: Container meets enterprise DevSecOps deployment threshold."
+      "pip-audit: 14 Starlette CVEs patched (fastapi>=0.115.0, starlette>=1.1.0)",
+      "Status: Container scan completed in reporting mode (exit-code: 0, does not block CI)."
     ]
   },
   {
@@ -489,10 +625,10 @@ export const terminalCommands: TerminalCommand[] = [
     description: "List available interactive commands",
     output: [
       "Available commands you can run:",
-      "  • kubectl get pods -n production",
+      "  • kubectl get pods -n payments",
       "  • terraform plan -target=module.aws_infrastructure",
-      "  • argocd app get self-healing-k8s",
-      "  • trivy image ankush/self-service-platform:latest",
+      "  • argocd app get fintech-payment-platform-eks",
+      "  • trivy image ankush/payment-api:latest",
       "  • cloudwatch get-alarm-history --alarm-name HighCPUAlert",
       "  • clear (clears the console)"
     ]

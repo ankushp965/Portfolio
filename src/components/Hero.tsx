@@ -88,7 +88,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResumeModal }) => {
 
             {/* Summary */}
             <p className="text-base sm:text-lg text-slate-400 leading-relaxed font-sans max-w-2xl">
-              Automating resilient <strong>AWS infrastructure</strong> with <strong>Terraform</strong>, enforcing declarative <strong>GitOps (Argo CD)</strong> continuous delivery, and engineering <strong>self-healing Kubernetes</strong> platforms with shift-left <strong>DevSecOps</strong> security gates.
+              Automating resilient <strong>AWS infrastructure</strong> with <strong>Terraform</strong>, enforcing declarative <strong>GitOps (Argo CD)</strong> continuous delivery, and engineering <strong>cloud-native Kubernetes</strong> platforms with progressive canary rollouts and shift-left <strong>DevSecOps</strong> security gates.
             </p>
 
             {/* Quick Tech Badge Row */}
@@ -210,7 +210,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResumeModal }) => {
                     <div className="flex items-center justify-between text-slate-400 pb-2 border-b border-slate-800">
                       <span>Kubernetes Engine</span>
                       <span className="text-sky-400 font-semibold flex items-center gap-1.5">
-                        <SiKubernetes size={13} /> EKS v1.30 Managed Node
+                        <SiKubernetes size={13} /> EKS v1.31 Spot Worker Nodes
                       </span>
                     </div>
                     <div className="flex items-center justify-between text-slate-400 pb-2 border-b border-slate-800">
@@ -220,8 +220,8 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResumeModal }) => {
                       </span>
                     </div>
                     <div className="flex items-center justify-between text-slate-400 pb-2 border-b border-slate-800">
-                      <span>Autonomous Self-Healing</span>
-                      <span className="text-emerald-400 font-semibold">Active (Alertmanager + LangGraph)</span>
+                      <span>Progressive Canary Deployments</span>
+                      <span className="text-emerald-400 font-semibold">Active (Argo Rollouts + Prometheus)</span>
                     </div>
                     <div className="flex items-center justify-between text-slate-400">
                       <span>System Uptime</span>
@@ -230,7 +230,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResumeModal }) => {
 
                     <div className="mt-4 p-3 rounded-lg bg-slate-950 border border-slate-800 text-[11px] text-slate-400">
                       <span className="text-sky-400 font-semibold block mb-1">&gt; Active Topology:</span>
-                      AWS VPC (Public/Private) &bull; Nginx Ingress &bull; ECR &bull; Multi-AZ RDS MySQL
+                      AWS VPC (Public/Private) &bull; EKS 1.31 Spot Nodes &bull; Argo Rollouts &bull; Kyverno CEL Guardrails
                     </div>
                   </div>
                 )}

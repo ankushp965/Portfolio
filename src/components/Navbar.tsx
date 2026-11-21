@@ -32,7 +32,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenResumeModal }) => {
     { name: 'Skills', id: 'skills' },
     { name: 'Experience', id: 'experience' },
     { name: 'Projects', id: 'projects' },
-    { name: 'Certs & Edu', id: 'certifications' },
     { name: 'Contact', id: 'contact' },
   ];
 

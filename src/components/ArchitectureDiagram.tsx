@@ -4,8 +4,7 @@ import {
   ShieldCheck, 
   Layers, 
   Cloud, 
-  CheckCircle2, 
-  Cpu 
+  CheckCircle2 
 } from 'lucide-react';
 import { FaAws } from 'react-icons/fa';
 import { SiKubernetes, SiDocker, SiPrometheus, SiNginx, SiMysql } from 'react-icons/si';
@@ -46,11 +45,11 @@ const archNodes: ArchNode[] = [
     id: 'eks',
     name: 'AWS EKS Managed Cluster',
     layer: 'compute',
-    service: 'Kubernetes v1.30',
+    service: 'Kubernetes v1.31 (Spot Nodes)',
     icon: SiKubernetes,
-    description: 'Highly available Kubernetes control plane with EC2 managed worker nodes running microservices and automated replica scaling.',
+    description: 'AWS EKS 1.31 control plane with 2x c7i-flex.large Spot worker nodes provisioned via Terraform with ~60% estimated compute savings vs On-Demand.',
     security: 'IAM Roles for Service Accounts (IRSA) enforcing least-privilege pod permissions.',
-    codeSnippet: 'module "eks" {\n  source       = "terraform-aws-modules/eks/aws"\n  cluster_name = "production-eks"\n}'
+    codeSnippet: 'module "eks" {\n  source       = "terraform-aws-modules/eks/aws"\n  cluster_name = "payment-eks-1-31"\n}'
   },
   {
     id: 'argocd',
@@ -83,14 +82,14 @@ const archNodes: ArchNode[] = [
     codeSnippet: 'resource "aws_ecr_repository" "repo" {\n  image_tag_mutability = "IMMUTABLE"\n}'
   },
   {
-    id: 'selfhealing',
-    name: 'LangGraph Self-Healing Agent',
+    id: 'rollouts',
+    name: 'Argo Rollouts & Prometheus Canary',
     layer: 'healing',
-    service: 'Autonomous Remediation',
-    icon: Cpu,
-    description: 'Alertmanager triggers a FastAPI webhook to a LangGraph troubleshooting agent upon CrashLoopBackOff or OOMKilled events to diagnose logs and initiate automated Helm rollback or pod restart.',
-    security: 'Scoped Kubernetes RBAC permissions limited to deployment restarts and rollback.',
-    codeSnippet: 'def remediate_incident(state: ClusterState):\n  if state.crash_count > 3:\n    execute_helm_rollback(release="api")'
+    service: 'Progressive Canary Delivery',
+    icon: ShieldCheck,
+    description: 'Argo Rollouts executes 25% -> 50% -> 100% traffic progression with 30s pauses. Prometheus AnalysisTemplate queries HTTP 500 error rate every 10s and automatically aborts in ~20s if error thresholds are exceeded.',
+    security: 'Kyverno CEL ValidatingPolicies enforce non-root execution, disallow :latest tags, and mandate CPU/memory limits.',
+    codeSnippet: 'apiVersion: argoproj.io/v1alpha1\nkind: Rollout\nspec:\n  strategy:\n    canary:\n      analysis:\n        templates:\n          - templateName: http-500-rate'
   },
   {
     id: 'prometheus',
@@ -106,7 +105,7 @@ const archNodes: ArchNode[] = [
 
 export const ArchitectureDiagram: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'architecture' | 'pipeline'>('architecture');
-  const [selectedNodeId, setSelectedNodeId] = useState<string>('selfhealing');
+  const [selectedNodeId, setSelectedNodeId] = useState<string>('rollouts');
 
   const selectedNode = archNodes.find(n => n.id === selectedNodeId) || archNodes[6];
 
@@ -372,11 +371,11 @@ export const ArchitectureDiagram: React.FC = () => {
                   <span className="font-mono text-[10px] text-zinc-500 mt-4 block">Private Data Subnet</span>
                 </div>
 
-                {/* 4. Self-Healing & SRE Layer */}
+                {/* 4. Progressive Canary & Guardrails Layer */}
                 <div className="p-4 rounded-xl bg-[#040508] border border-emerald-500/20 flex flex-col justify-between">
                   <div>
                     <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-emerald-400 block mb-3">
-                      4. Self-Healing Loop
+                      4. Canary &amp; Policy Guardrails
                     </span>
                     <div className="space-y-2.5">
                       {archNodes.filter(n => n.layer === 'healing').map(node => {

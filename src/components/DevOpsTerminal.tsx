@@ -21,14 +21,15 @@ export const DevOpsTerminal: React.FC = () => {
   const [currentInput, setCurrentInput] = useState('');
   const [terminalHistory, setTerminalHistory] = useState<Array<{ command: string; output: string | string[] }>>([
     {
-      command: 'kubectl get pods -n production',
+      command: 'kubectl get pods -n payments',
       output: [
         "NAME                                    READY   STATUS    RESTARTS   AGE",
-        "self-healing-agent-7f99b8b64b-k82zq    1/1     Running   0          4d12h",
-        "data-platform-api-5c74776cb6-l8qsm     1/1     Running   0          2d18h",
-        "nginx-ingress-controller-6d7f8d6-xmn2  1/1     Running   0          14d",
-        "argocd-server-7956dfb4c7-w8nkl        1/1     Running   0          18d",
-        "prometheus-k8s-0                       2/2     Running   0          18d"
+        "payment-api-7b89d494f6-82xkz            1/1     Running   0          2d4h",
+        "ledger-684f88bdc6-n9wql                 1/1     Running   0          2d4h",
+        "notification-5975dbb9cf-v72pm           1/1     Running   0          2d4h",
+        "postgres-5d46fb7476-q8rm9               1/1     Running   0          2d4h",
+        "argo-rollouts-747f485db-xkdls           1/1     Running   0          18d",
+        "prometheus-server-5d6cbdf54-mk89q       2/2     Running   0          18d"
       ]
     }
   ]);
@@ -89,8 +90,8 @@ export const DevOpsTerminal: React.FC = () => {
       step: 7,
       title: "7. SRE Telemetry",
       tool: "CloudWatch & Prometheus",
-      description: "CloudWatch custom metrics (5-min intervals) with SNS email alarms, and Prometheus/Alertmanager webhook to LangGraph self-healing agent.",
-      gate: "Automated Incident Remediation",
+      description: "CloudWatch custom metrics (5-min intervals) with SNS email alarms, and Prometheus scraping canary metrics for Argo Rollouts AnalysisTemplates.",
+      gate: "Prometheus Canary Evaluation",
       color: "border-indigo-500 text-indigo-400 bg-indigo-500/10"
     }
   ];
@@ -116,10 +117,10 @@ export const DevOpsTerminal: React.FC = () => {
     } else if (trimmed.toLowerCase() === 'help') {
       outputResult = [
         "Available commands:",
-        "  • kubectl get pods -n production",
+        "  • kubectl get pods -n payments",
         "  • terraform plan -target=module.aws_infrastructure",
-        "  • argocd app get self-healing-k8s",
-        "  • trivy image ankush/self-service-platform:latest",
+        "  • argocd app get fintech-payment-platform-eks",
+        "  • trivy image ankush/payment-api:latest",
         "  • cloudwatch get-alarm-history --alarm-name HighCPUAlert",
         "  • clear"
       ];

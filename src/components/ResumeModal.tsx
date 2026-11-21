@@ -69,11 +69,11 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
         </div>
 
         {/* PDF Viewer Frame */}
-        <div className="flex-grow bg-[#05060a] w-full relative">
+        <div className="flex-grow bg-slate-900 w-full relative overflow-hidden flex flex-col">
           <iframe
-            src={`${personalInfo.resumeDownloadUrl}#toolbar=0&navpanes=0&scrollbar=1`}
-            title="Ankush Prajapati Resume"
-            className="w-full h-full border-none"
+            src={personalInfo.resumeDownloadUrl}
+            className="w-full h-full border-none bg-white"
+            title={`${personalInfo.name} Resume`}
           />
         </div>
 
